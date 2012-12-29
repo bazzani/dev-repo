@@ -4,5 +4,7 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		
+		<fx:Number id="b">1</fx:Number>
 	</fx:Declarations>
 </s:Application>
