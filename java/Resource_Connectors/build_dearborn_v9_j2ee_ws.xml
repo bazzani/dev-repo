@@ -1,0 +1,100 @@
+<project name="Dearborn 9 j2ee wsdl2java Build" default="build project" basedir=".">
+	<description>
+        Build file for Dearborn 9 j2ee wsdl2java
+    </description>
+
+	<!-- Reads the system environment variables and stores them in properties, prefixed with "env". -->
+	<property environment="env" />
+
+	<!-- load previously defined configuration properties file -->
+	<property file="build.properties" />
+
+	<property name="doc_dist" value="doc/Dearborn V9 J2EE" description="Build specific javadoc location"/>
+	<property name="localTomcatPresent" value="false" description="Property to verify if Tomcat is installed on the local machine"/>
+
+	<target name="build project" depends="init, compile, dist, copyToLocalTomcat, doc" />
+	
+	<target name="init" description="Initialise the build by deleting any existing output files">
+		<!-- Create the time stamp -->
+		<tstamp />
+
+		<!-- Delete the ${build} directory tree -->
+		<delete dir="${build}" />
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build}" />
+		
+		<!-- Delete the ${doc_dist} directory tree -->
+		<delete dir="${doc_dist}" />
+		<!-- Create the doc_dist directory structure used by javadoc -->
+		<mkdir dir="${doc_dist}" />
+	</target>
+
+	<target name="compile" depends="init" description="compile the source code">
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac srcdir="${src}" destdir="${build}" target="1.5">
+			<exclude name="**/connectors/" />
+			<exclude name="**/concurrent/" />
+
+			<classpath>
+				<fileset dir="${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="dist" depends="compile" description="generate the distribution files">
+		<!-- Create the distribution directory -->
+		<mkdir dir="${dist}/lib" />
+
+		<!-- Put everything in ${build} into the lib/ATMT_Dearborn_WS_v9_j2ee-${DSTAMP}.jar file -->
+		<jar jarfile="${dist}/lib/ATMT_Dearborn_WS_v9_j2ee-${DSTAMP}.jar" basedir="${build}">
+			<exclude name="**/connectors/" />
+			<exclude name="**/concurrent/" />
+		</jar>
+
+		<!-- Copy the jar file to the working libraries directory -->
+		<copy file="${dist}/lib/ATMT_Dearborn_WS_v9_j2ee-${DSTAMP}.jar" tofile="${libs}/ATMT_Dearborn_WS_v9_j2ee.jar" />
+
+		<!--
+			Determine if Tomcat is installed on the local machine by searching
+			for existence of the specified directory
+		-->
+		<condition property="localTomcatPresent">
+			<available file="${tomcat_base_dir_local}/shared/libs/" />
+		</condition>
+	</target>
+
+	<target name="copyToLocalTomcat" if="localTomcatPresent" depends="dist" description="Copy the new jar file to the local Tomcat if it exists">
+		<!-- Copy the jar file to the "shared/libs" directory in Tomcat -->
+		<copy file="${dist}/lib/ATMT_Dearborn_WS_v9_j2ee-${DSTAMP}.jar" tofile="${tomcat_base_dir_local}/shared/lib/ATMT_Dearborn_WS_v9_j2ee.jar" />
+	</target>
+	
+	<target name="doc">
+        <javadoc
+        	executable="${javadoc_executable}"
+			access="public" 
+			author="true" 
+			destdir="${doc_dist}" 
+			doctitle="Autometrics Analytics (V9 J2EE) Web Services API" 
+			nodeprecated="true" 
+			nodeprecatedlist="true" 
+			noindex="false" 
+			nonavbar="false" 
+			notree="false" 
+			packagenames="com.autometrics.analytics.v9.j2ee.*" 
+			source="1.5"
+			sourcepath="${src}" 
+			splitindex="true" 
+			use="true" 
+			version="true">
+			
+			<classpath>
+				<fileset dir="${libs}">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+				
+		</javadoc>
+    </target>
+</project>

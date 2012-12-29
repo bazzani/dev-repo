@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+</head>
+<body bgcolor="white">
+<p>Provides the classes required to support concurrent requests to resources.
+This package contains various classes including a Singleton (ChannelManager) that 
+governs all incoming requests and returns the resource when it becomes available.
+
+<h2>Package Specification</h2>
+<p>Provides the classes required to perform concurrent resource requests to a number of channels.
+Each <code>Channel</code> object is unique based upon the request properties it is responsible for providing a resource to. The 
+<code>ChannelHost</code> object is responsible for retrieving the resource and applying it to the channel.
+</p>
+<p>When a channel has returned a resource to its last requesting <code>ChannelSubscriber</code> an attempt to 
+perform a cleanup of the channel is initiated via a <code>ChannelRecycler</code> object.
+</br>
+If no further requests to that channel are received within a specified time frame, the <code>Channel</code> will be recycled.
+If a request synonymous to that channel is received within the time frame the recycling process is cancelled.  
+</p>
+ 
+@see com.autometrics.concurrent.Channel
+@see com.autometrics.concurrent.ChannelHost
+@see com.autometrics.concurrent.ChannelManager
+@see com.autometrics.concurrent.ChannelRecycler
+@see com.autometrics.concurrent.ChannelStore
+@see com.autometrics.concurrent.ChannelSubscriber
+</body>
+</html>

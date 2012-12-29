@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+</head>
+<body bgcolor="white">
+Provides the classes required to create and use data connectors.
+
+This package contains various classes and interfaces, including a Factory class that will instantiate 
+and return an implementation of the <code>IDataConnector</code> interface which all data connectors must implement.
+
+
+<h2>Package Specification</h2>
+Provides the classes required to construct data connectors.
+
+Data connectors provide an interface to connect to a variety of data sources within the Autometrics platform.
+
+The <code>DataConnectorFactory</code> class has a number of static properties defining the valid data connectors available in the current version, and it is a good first point of reference.
+
+@see com.autometrics.connectors.IResourceConnector
+@see com.autometrics.connectors.AbstractResourceConnector
+@see com.autometrics.generics.vo.PropertiesVO
+@see com.autometrics.connectors.ResourceConnectorFactory
+@see com.autometrics.connectors.dearborn
+</body>
+</html>
